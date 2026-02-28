@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Aseguramos que el contenedor principal ocupe toda la pantalla */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
