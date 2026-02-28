@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import ReactFlow, { 
   Background, 
   Controls, 
@@ -12,7 +12,7 @@ import ReactFlow, {
   type EdgeChange   
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import type { Rule, FactState, InferenceMethod } from './types';
+import type { Rule, InferenceMethod } from './types';
 import { evaluateGoal } from './inferenceEngine';
 
 
