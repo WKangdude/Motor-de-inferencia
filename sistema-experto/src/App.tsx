@@ -162,7 +162,7 @@ export default function ExpertSystemApp() {
       newInferences.forEach(([node, value], index) => {
         setTimeout(() => {
           setFacts(prev => ({ ...prev, [node]: value }));
-        }, index * 600); // 600 milisegundos entre cada nodo
+        }, index * 600);
       });
 
       setTimeout(() => {

@@ -21,16 +21,14 @@ export const evaluateGoal = (
   visited.add(goalId);
 
   const methodsToTry: InferenceMethod[] = method === 'automatic' ? ['ponens', 'tollens'] : [method];
-  
-  // Guardaremos el primer nodo faltante que encontremos, 
-  // para preguntarlo SOLO si todos los caminos fallan.
+
   let firstMissingNode: string | undefined = undefined;
 
   for (const currentMethod of methodsToTry) {
     
-    // ==========================================
-    // LÓGICA MODUS PONENS
-    // ==========================================
+    // ------------------------------------------
+    //* LÓGICA MODUS PONENS
+    // ------------------------------------------
     if (currentMethod === 'ponens') {
       const applicableRules = rules.filter((r) => r.conclusion === goalId);
       
@@ -38,7 +36,6 @@ export const evaluateGoal = (
         let allPremisesTrue = true;
 
         for (const premise of rule.premises) {
-          // Nota: Pasamos 'method' (el original) para mantener el modo automático en la recursividad
           const premiseEval = evaluateGoal(premise, rules, facts, method, newFacts, new Set(visited));
           
           if (!premiseEval.resolved) {
@@ -60,9 +57,9 @@ export const evaluateGoal = (
       }
     }
 
-    // ==========================================
-    // LÓGICA MODUS TOLLENS
-    // ==========================================
+    // ------------------------------------------
+    //* LÓGICA MODUS TOLLENS
+    // ------------------------------------------
     if (currentMethod === 'tollens') {
       const applicableRules = rules.filter((r) => r.premises.includes(goalId));
       
@@ -75,7 +72,7 @@ export const evaluateGoal = (
           continue; // Intentamos la siguiente regla
         }
 
-        // Si la conclusión es FALSA, revisamos las DEMÁS premisas
+        // Si la conclusión es FALSA, revisamos las demas premisas
         if (conclusionEval.value === false) {
           let otherPremisesTrue = true;
 
@@ -95,7 +92,7 @@ export const evaluateGoal = (
             }
           }
 
-          // Si la conclusión es falsa y todas las demás premisas son ciertas... ¡Lo encontramos!
+          // Si la conclusión es falsa y todas las demás premisas son ciertas encontramos la respuesta
           if (otherPremisesTrue) {
             newFacts[goalId] = false;
             return { resolved: true, value: false, inferredFacts: newFacts };
@@ -105,7 +102,7 @@ export const evaluateGoal = (
     }
   }
 
-  // Si agotamos absolutamente todas las reglas y caminos, pedimos ayuda al usuario
+  // Si agotamos absolutamente todas las reglas y caminos, pedimos el dato a usuario
   return { 
     resolved: false, 
     missingNodeToAsk: firstMissingNode || goalId, 
